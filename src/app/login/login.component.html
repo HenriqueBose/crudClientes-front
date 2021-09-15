@@ -1,0 +1,16 @@
+<div id="divCenter">
+  <div class="p-grid">
+    <div class="p-grid" style="padding: 2px">
+      <label>Login</label><br>
+      <input [(ngModel)]="login" type="text" pInputText><br>
+    </div>
+    <div class="p-grid" style="padding: 2px">
+      <label>Senha</label><br>
+      <input [(ngModel)]="senha" type="password" pInputText>
+    </div>
+    <div class="p-grid" style="padding: 2px; margin-top: 10px">
+      <button (click)="teste()" [disabled]="senha == null || senha == undefined || login == null || login == undefined || login == '' || senha == ''" style="width: 100%;height: 30px;font-weight: bold; background-color: #2D2D2D" pButton pRipple type="button" label="Acessar" class="p-button-secondary"></button>
+    </div>
+  </div>
+</div>
+

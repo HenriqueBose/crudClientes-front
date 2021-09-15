@@ -1,0 +1,10 @@
+#divCenter {
+  font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  border-radius: 15px;
+  background-color: white;
+  left: 55%;
+  margin: -130px 0 0 -210px;
+  padding:10px;
+  position: absolute;
+  top: 50%;
+}
