@@ -19,6 +19,16 @@ import {DialogModule} from "primeng/dialog";
 import {RatingModule} from "primeng/rating";
 import {TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
+import {ClientesService} from "./clientes.service";
+import {HttpClientModule} from "@angular/common/http";
+import {InputTextModule} from "primeng/inputtext";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ConfirmationService, MessageService} from "primeng/api";
+import {EmailService} from "./email.service";
+import {TelefoneService} from "./telefone.service";
+import {CepService} from "./cep.service";
+import {NgxMaskModule} from "ngx-mask";
+
 
 @NgModule({
   declarations: [
@@ -26,10 +36,12 @@ import {ToastModule} from "primeng/toast";
     LoginComponent,
     InicioComponent,
     ListarClientesComponent,
-    CadastrarClientesComponent
+    CadastrarClientesComponent,
+
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     ButtonModule,
     FormsModule,
@@ -43,9 +55,19 @@ import {ToastModule} from "primeng/toast";
     DialogModule,
     RatingModule,
     TableModule,
-    ToastModule
+    ToastModule,
+    InputTextModule,
+    BrowserAnimationsModule,
+    NgxMaskModule
   ],
-  providers: [],
+  providers: [
+    ClientesService,
+    ConfirmationService,
+    MessageService,
+    EmailService,
+    TelefoneService,
+    CepService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

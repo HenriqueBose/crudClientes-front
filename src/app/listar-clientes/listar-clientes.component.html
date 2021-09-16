@@ -1,0 +1,106 @@
+<app-navbar></app-navbar>
+<div id="layoutSidenav">
+  <app-sidebar></app-sidebar>
+  <div id="layoutSidenav_content">
+    <main>
+      <div class="container-fluid" style="padding: 50px">
+          <p-table #dt [value]="clientes" [rows]="10" [paginator]="true" [globalFilterFields]="['nome', 'cpf', 'cep', 'cidade', 'uf']" responsiveLayout="scroll"
+                   [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+              <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">Clientes cadastrados</h5>
+                <span class="p-input-icon-left">
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Pesquisar..." />
+                </span>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th pSortableColumn="name">Nome <p-sortIcon field="name"></p-sortIcon></th>
+                <th>CPF</th>
+                <th>CEP </th>
+                <th>CIDADE </th>
+                <th>UF </th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cliente>
+              <tr>
+                <td>{{cliente.nome}}</td>
+                <td>{{cliente.cpf}}</td>
+                <td>{{cliente.cep}}</td>
+                <td>{{cliente.cidade}}</td>
+                <td>{{cliente.uf}}</td>
+                <td>
+                  <button pButton pRipple icon="pi pi-pencil" style="margin-right: 10px" class="p-button-rounded p-button-success p-mr-2" (click)="abriEditarCliente(cliente)"></button>
+                  <button pButton pRipple icon="pi pi-trash" style="margin-right: 10px" class="p-button-rounded p-button-danger" (click)="deletarClienteSelecionado(cliente.id)"></button>
+                  <button pButton pRipple icon="pi pi-eye" style="margin-right: 10px" class="p-button-rounded p-button-primary" (click)="visualizarCliente(cliente)"></button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+              <div class="p-d-flex p-ai-center p-jc-between">
+                 {{clientes ? clientes.length : 0 }} clientes cadastrados.
+              </div>
+            </ng-template>
+          </p-table>
+      </div>
+    </main>
+  </div>
+</div>
+
+<p-dialog [(visible)]="dialogEditar" [style]="{width: '600px'}" header="Editar Cliente" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+      <div class="p-field">
+        <label for="nome">Nome</label>
+        <input  type="text" pInputText id="nome" [(ngModel)]="clienteSelecionado.nome" required autofocus />
+  <!--      <small class="p-error" *ngIf="submitted && !product.name">Name is required.</small>-->
+      </div>
+      <div class="p-field">
+        <label for="cpf">CPF</label>
+        <input id="cpf" pInputText [(ngModel)]="clienteSelecionado.cpf" required/>
+      </div>
+    <div class="p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="email">Email(s)</label>
+        <input style="margin-top: 5px" *ngFor="let email of listEmail;let index=index" type="text" (change)="alteraEmail(index, $event.target.value)" pInputText id="email" [value]="email.email" required autofocus />
+      </div>
+      <div class="p-field p-col">
+        <label for="email">Telefone(s)</label>
+        <input style="margin-top: 5px" *ngFor="let telefone of listTelefone;let index=index" (change)="alteraNumero(index, $event.target.value)" type="text" pInputText id="telefone" [value]="telefone.numero" required autofocus />
+      </div>
+      <div class="p-field p-col">
+        <label for="cep">CEP</label>
+        <input type="text" (change)="buscaEndereco()" pInputText id="cep" [(ngModel)]="clienteSelecionado.cep" required autofocus />
+<!--        colocar mascara de cep-->
+      </div>
+    </div>
+    <div class="p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="email">Bairro</label>
+        <input type="text" pInputText id="bairro" readonly [(ngModel)]="clienteSelecionado.bairro" required autofocus />
+      </div>
+      <div class="p-field p-col">
+        <label for="cep">Cidade</label>
+        <input type="text"  pInputText id="cidade" readonly [(ngModel)]="clienteSelecionado.cidade" required autofocus />
+      </div>
+    </div>
+    <div class="p-formgrid p-grid">
+      <div class="p-field p-col">
+        <label for="email">UF</label>
+        <input type="text" autocapitalize="on" pInputText id="uf" readonly [(ngModel)]="clienteSelecionado.uf" required autofocus />
+      </div>
+      <div class="p-field p-col">
+        <label for="cep">Complemento</label>
+        <input type="text"  pInputText id="complemento" [(ngModel)]="clienteSelecionado.complemento" required autofocus />
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="fecharDialogEditar()"></button>
+    <button pButton pRipple label="Editar" icon="pi pi-check" class="p-button-text" (click)="editarCliente()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<p-toast baseZIndex.number="99999" class="p-toast-topright"></p-toast>
