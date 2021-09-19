@@ -1,6 +1,6 @@
 # CrudClientes
 
-Esse projeto foi gerado a partir do Angular CLI 12
+Esse projeto foi gerado a partir do Angular CLI 12<br>
 Para executar este projeto será necessário instalar algumas dependencias:
 
 
