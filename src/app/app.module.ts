@@ -28,6 +28,10 @@ import {EmailService} from "./email.service";
 import {TelefoneService} from "./telefone.service";
 import {CepService} from "./cep.service";
 import {NgxMaskModule} from "ngx-mask";
+import {KeyFilterModule} from "primeng/keyfilter";
+import {MessageModule} from "primeng/message";
+import {InputTextareaModule} from "primeng/inputtextarea";
+import {InputMaskModule} from "primeng/inputmask";
 
 
 @NgModule({
@@ -58,7 +62,11 @@ import {NgxMaskModule} from "ngx-mask";
     ToastModule,
     InputTextModule,
     BrowserAnimationsModule,
-    NgxMaskModule
+    NgxMaskModule,
+    KeyFilterModule,
+    MessageModule,
+    InputTextareaModule,
+    InputMaskModule
   ],
   providers: [
     ClientesService,

@@ -1,4 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import {ClienteModel} from "../models/cliente.model";
+import {ClientesService} from "../clientes.service";
+import {ConfirmationService, MessageService} from "primeng/api";
+import {EmailService} from "../email.service";
+import {TelefoneService} from "../telefone.service";
+import {CepService} from "../cep.service";
+import {EmailModel} from "../models/email.model";
+import {TelefoneModel} from "../models/telefone.model";
+import {lastId} from "primeng/utils/uniquecomponentid";
 
 @Component({
   selector: 'app-cadastrar-clientes',
@@ -7,9 +16,114 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CadastrarClientesComponent implements OnInit {
 
-  constructor() { }
+  emailList: EmailModel[] =  [{
+    idCliente: 0,
+    email: '',
+    id: 0
+  }];
+  telefoneList: TelefoneModel[] =  [{
+    idCliente: 0,
+    numero: '',
+    id: 0
+  }];
+
+  cliente: ClienteModel = new ClienteModel();
+  alphanumericos : RegExp = /^[\w\-\s]+$/
+  lastId: number;
+
+
+  constructor(private clienteService: ClientesService,
+              private confirmationService: ConfirmationService,
+              private emailService: EmailService,
+              private telefoneService: TelefoneService,
+              private cepService: CepService,
+              private messageService: MessageService) { }
 
   ngOnInit(): void {
   }
 
+  buscaEndereco() {
+    if (this.cliente.cep.toString().replace('-', '').length == 8) {
+      this.cepService.findEndereco(this.cliente.cep).subscribe(response => {
+        console.log(response)
+        this.cliente.uf = response.uf;
+        this.cliente.logradouro = response.logradouro;
+        this.cliente.bairro = response.bairro;
+        this.cliente.cidade = response.localidade;
+
+      },error => {
+        console.log(error)
+      })
+    }
+  }
+
+
+  cadastrarCliente() {
+    this.cliente.cpf = this.cliente.cpf.replace('.', '').replace('.', '').replace('-', '')
+    this.cliente.cep = Number(this.cliente.cep.toString().replace('-', ''))
+    console.log(this.cliente)
+    this.clienteService.salvar(this.cliente).subscribe(response =>{
+      // @ts-ignore
+      this.lastId = response.msg
+      console.log(this.lastId)
+      this.salvarEmails();
+      this.salvarNumeros();
+      this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'response.msg', life: 3000});
+    },error =>{
+      console.log(error)
+      this.messageService.add({severity:'error', summary: 'Erro', detail: error, life: 3000});
+    })
+
+  }
+
+  validaCampos(): boolean{
+    if(this.cliente.cpf == undefined || this.cliente.cpf == '' || this.cliente.cep == undefined ||
+      this.cliente.cep == null || this.cliente.nome.length > 100 || this.cliente.nome.length < 3 ||
+      this.cliente.cidade == undefined || this.cliente.cidade == ''||
+      this.cliente.logradouro == undefined || this.cliente.bairro == ''||
+      this.cliente.uf == undefined || this.cliente.uf == '' || this.emailList[0].email == undefined || this.emailList[0].email == ''){
+      return true;
+    }else {
+      return false;
+    }
+  }
+
+  addEmail() {
+    this.emailList.push({
+      idCliente: 0,
+      email: '',
+      id: 0
+    });
+  }
+  addTelefone() {
+    this.telefoneList.push({
+      idCliente: 0,
+      numero: '',
+      id: 0
+    });
+  }
+
+  salvarEmails() {
+    let self=this;
+    this.emailList.forEach(function (value) {
+      value.idCliente = self.lastId;
+      self.emailService.save(value).subscribe(response=>{
+        console.log(response)
+      }, error => {
+        console.log(error)
+      })
+    });
+  }
+
+  salvarNumeros() {
+    let self=this;
+    this.telefoneList.forEach(function (value) {
+      value.idCliente = self.lastId;
+      self.telefoneService.save(value).subscribe(response=>{
+        console.log(response)
+      }, error => {
+        console.log(error)
+      })
+    });
+  }
 }

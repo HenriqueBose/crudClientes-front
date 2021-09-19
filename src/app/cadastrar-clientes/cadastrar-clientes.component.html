@@ -1,13 +1,68 @@
-<app-navbar></app-navbar>
+<p-toast></p-toast>
+
+<app-navbar xmlns="http://www.w3.org/1999/html"></app-navbar>
 <div id="layoutSidenav">
   <app-sidebar></app-sidebar>
   <div id="layoutSidenav_content">
-    <main>
-      <div class="container-fluid">
-
-       CADASTRAR CLIENTES
-
+    <div class="container-fluid">
+      <div class="card" style="margin: 1%;font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif">
+        <h5 style="margin: 1%">Cadastrar cliente</h5>
+        <div class="container">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <span>Nome </span><span style="color: red"> *</span>
+              <input type="text" [maxLength]="100" [(ngModel)]="cliente.nome" [pKeyFilter]="alphanumericos" pInputText class="form-control" id="nome" placeholder="Nome">
+            </div>
+            <div class="form-group col-md-6">
+              <span>CPF</span><span style="color: red"> *</span><br>
+              <p-inputMask [(ngModel)]="cliente.cpf"  mask="999.999.999-99"></p-inputMask>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6" style="margin-top: 0.5%">
+              <span>CEP</span><span style="color: red"> *</span><br>
+              <p-inputMask [(ngModel)]="cliente.cep"  (change)="buscaEndereco()"  mask="99999-999"></p-inputMask>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="cidade">CIDADE</label><span style="color: red"> *</span>
+              <input type="text"  [(ngModel)]="cliente.cidade" pInputText class="form-control" id="cidade" placeholder="Cidade">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-5">
+              <label for="logradouro">LOGRADOURO</label><span style="color: red"> *</span>
+              <input type="text"  [(ngModel)]="cliente.logradouro" pInputText class="form-control" id="logradouro" placeholder="Logradouro">
+            </div>
+            <div class="form-group col-md-5">
+              <label for="bairro">BAIRRO</label><span style="color: red"> *</span>
+              <input type="text"  [(ngModel)]="cliente.bairro" pInputText class="form-control" id="bairro" placeholder="Bairro">
+            </div>
+            <div class="form-group col-md-2">
+              <label for="uf">UF</label><span style="color: red"> *</span>
+              <input type="text"  [(ngModel)]="cliente.uf" pInputText class="form-control" id="uf" placeholder="UF">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-group">
+              <label for="complemento">Complemento</label>
+              <textarea type="text" [(ngModel)]="cliente.complemento" pInputTextarea class="form-control" id="complemento" placeholder="Complemento"></textarea>
+            </div>
+            <div class="form-row">
+              <div  class="form-group col-md-12">
+                <label for="email">EMAIL</label><span style="color: red"> * </span><a  href="javascript:void(0);" (click)="addEmail()"><i style="size: 2em" class="fas fa-plus-square"></i></a>
+                <input *ngFor="let email of emailList;let i=index" type="email" [(ngModel)]="emailList[i].email" pInputText class="form-control" id="email" placeholder="Email">
+              </div>
+              <div class="form-group col-md-12">
+                <label for="telefone">TELEFONE</label><span style="color: red"> * </span><a  href="javascript:void(0);" (click)="addTelefone()"><i style="size: 2em" class="fas fa-plus-square"></i></a>
+                <input *ngFor="let telefone of telefoneList;let i=index"  [(ngModel)]="telefoneList[i].numero" type="number" pInputText class="form-control" id="telefone" placeholder="Telefone">
+              </div>
+            </div>
+            <div style="text-align: right; margin-bottom: 2%">
+              <button (click)="cadastrarCliente()" [disabled]="validaCampos()" class="btn btn-primary">Cadastrar</button>
+            </div>
+          </div>
+        </div>
       </div>
-    </main>
+    </div>
   </div>
 </div>

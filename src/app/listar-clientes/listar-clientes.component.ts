@@ -17,10 +17,12 @@ import {createSelf} from "@angular/compiler/src/core";
 })
 export class ListarClientesComponent implements OnInit {
 
+
   clientes: Array<ClienteModel> = []
   listEmail: Array<EmailModel> = []
   listTelefone: Array<TelefoneModel> = []
   dialogEditar: boolean = false;
+  dialogVisualizar: boolean = false;
   clienteSelecionado : ClienteModel = new ClienteModel();
 
   constructor(private clienteService: ClientesService,
@@ -37,25 +39,19 @@ export class ListarClientesComponent implements OnInit {
 
   abriEditarCliente(cliente: any) {
     this.preencheClienteSelecionado(cliente);
-    this.emailService.findAll(cliente.id).subscribe(response =>{
-      console.log('lista email ' + response)
-      this.listEmail = response;
-    })
-    this.telefoneService.findAll(cliente.id).subscribe(response=>{
-      console.log('lista telefone ' + response)
-      this.listTelefone = response
-    })
+    this.buscarContatoCliente(cliente);
     this.dialogEditar = true;
   }
 
   async editarCliente() {
+    this.clienteSelecionado.cpf = this.clienteSelecionado.cpf.replace('.', '').replace('.', '').replace('-', '')
+    this.clienteSelecionado.cep = Number(this.clienteSelecionado.cep.toString().replace('-', ''))
     console.log('editar clientes')
     await this.clienteService.editar(this.clienteSelecionado).subscribe(response => {
       console.log('response', response);
       this.refreshData()
-
+      this.messageService.add({severity:'success', summary:'Confirmed', detail:'Cliente editado com sucesso!'});
     })
-
     this.editarEmails();
     this.editarTelefones();
     this.dialogEditar = false;
@@ -69,8 +65,11 @@ export class ListarClientesComponent implements OnInit {
   }
 
   visualizarCliente(cliente: any) {
-
+    this.preencheClienteSelecionado(cliente)
+    this.buscarContatoCliente(cliente)
+    this.dialogVisualizar = true;
   }
+
 
   fecharDialogEditar() {
     this.dialogEditar = false;
@@ -90,7 +89,7 @@ export class ListarClientesComponent implements OnInit {
   }
 
   buscaEndereco() {
-    if (this.clienteSelecionado.cep.toString().length == 8) {
+    if (this.clienteSelecionado.cep.toString().length == 9) {
       this.cepService.findEndereco(this.clienteSelecionado.cep).subscribe(response => {
         console.log(response)
         this.clienteSelecionado.uf = response.uf;
@@ -157,4 +156,29 @@ export class ListarClientesComponent implements OnInit {
       console.log('lista de clientes ' + this.clientes);
     })
   }
+
+  buscarContatoCliente(cliente: any) {
+    this.emailService.findAll(cliente.id).subscribe(response =>{
+      console.log('lista email ' + response)
+      this.listEmail = response;
+    })
+    this.telefoneService.findAll(cliente.id).subscribe(response=>{
+      console.log('lista telefone ' + response)
+      this.listTelefone = response
+    })
+
+  }
+
+  validaCampos(): boolean{
+    if(this.clienteSelecionado.cpf == undefined || this.clienteSelecionado.cpf == '' || this.clienteSelecionado.cep == undefined ||
+      this.clienteSelecionado.cep == null ||this.clienteSelecionado.cep == 0 || this.clienteSelecionado.nome.length > 100 || this.clienteSelecionado.nome.length < 3 ||
+      this.clienteSelecionado.cidade == undefined || this.clienteSelecionado.cidade == ''||
+      this.clienteSelecionado.logradouro == undefined || this.clienteSelecionado.bairro == ''||
+      this.clienteSelecionado.uf == undefined || this.clienteSelecionado.uf == '' ){
+      return true;
+    }else {
+      return false;
+    }
+  }
+
 }

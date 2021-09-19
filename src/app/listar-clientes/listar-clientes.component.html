@@ -16,7 +16,7 @@
             </ng-template>
             <ng-template pTemplate="header">
               <tr>
-                <th pSortableColumn="name">Nome <p-sortIcon field="name"></p-sortIcon></th>
+                <th>Nome</th>
                 <th>CPF</th>
                 <th>CEP </th>
                 <th>CIDADE </th>
@@ -58,7 +58,7 @@
       </div>
       <div class="p-field">
         <label for="cpf">CPF</label>
-        <input id="cpf" pInputText [(ngModel)]="clienteSelecionado.cpf" required/>
+        <p-inputMask [(ngModel)]="clienteSelecionado.cpf" id="cpf"  mask="999.999.999-99"></p-inputMask>
       </div>
     <div class="p-formgrid p-grid">
       <div class="p-field p-col">
@@ -66,13 +66,13 @@
         <input style="margin-top: 5px" *ngFor="let email of listEmail;let index=index" type="text" (change)="alteraEmail(index, $event.target.value)" pInputText id="email" [value]="email.email" required autofocus />
       </div>
       <div class="p-field p-col">
-        <label for="email">Telefone(s)</label>
+        <label for="telefone">Telefone(s)</label>
         <input style="margin-top: 5px" *ngFor="let telefone of listTelefone;let index=index" (change)="alteraNumero(index, $event.target.value)" type="text" pInputText id="telefone" [value]="telefone.numero" required autofocus />
       </div>
       <div class="p-field p-col">
         <label for="cep">CEP</label>
-        <input type="text" (change)="buscaEndereco()" pInputText id="cep" [(ngModel)]="clienteSelecionado.cep" required autofocus />
-<!--        colocar mascara de cep-->
+        <p-inputMask [(ngModel)]="clienteSelecionado.cep" id="cep" (change)="buscaEndereco()"  mask="99999-999"></p-inputMask>
+
       </div>
     </div>
     <div class="p-formgrid p-grid">
@@ -92,15 +92,72 @@
       </div>
       <div class="p-field p-col">
         <label for="cep">Complemento</label>
-        <input type="text"  pInputText id="complemento" [(ngModel)]="clienteSelecionado.complemento" required autofocus />
+        <textarea type="text" [(ngModel)]="clienteSelecionado.complemento" pInputTextarea class="form-control"  id="complemento"></textarea>
       </div>
     </div>
   </ng-template>
   <ng-template pTemplate="footer">
     <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="fecharDialogEditar()"></button>
-    <button pButton pRipple label="Editar" icon="pi pi-check" class="p-button-text" (click)="editarCliente()"></button>
+    <button pButton pRipple label="Editar" [disabled]="validaCampos()" icon="pi pi-check" class="p-button-text" (click)="editarCliente()"></button>
   </ng-template>
 </p-dialog>
+
+
+<p-dialog header="Visualizar Cliente" [(visible)]="dialogVisualizar" [breakpoints]="{'960px': '75vw'}" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false">
+  <div class="grid">
+    <div class="col-4">
+      <label>Nome: </label>
+      <input class="p-inputgroup" pInputText readonly [value]="clienteSelecionado.nome">
+    </div>
+    <div class="col-4">
+      <label>CPF: </label>
+      <input class="p-inputgroup" pInputText readonly [value]="clienteSelecionado.cpf">
+    </div>
+    <div class="col-4">
+      <label>CEP: </label>
+      <input class="p-inputgroup" pInputText readonly [value]="clienteSelecionado.cep">
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-4">
+      <label>Cidade: </label>
+      <input class="p-inputgroup" pInputText readonly [value]="clienteSelecionado.cidade">
+    </div>
+    <div class="col-2 ">
+      <label>UF: </label>
+      <input class="p-inputgroup" pInputText readonly [value]="clienteSelecionado.uf">
+    </div>
+    <div class="col-4 offset-2">
+      <label>Logradouro: </label>
+      <input class="p-inputgroup" pInputText readonly [value]="clienteSelecionado.logradouro">
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-4">
+      <label>Bairro: </label>
+      <input class="p-inputgroup" pInputText readonly [value]="clienteSelecionado.bairro">
+    </div>
+    <div class="col-5">
+      <label>Complemento: </label>
+      <input class="p-inputgroup" pInputText readonly [value]="clienteSelecionado.complemento == undefined ? 'Não informado' : clienteSelecionado.complemento">
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-4">
+      <label>Emails: </label><br>
+      <input class="p-inputgroup" pInputText readonly *ngFor="let email of listEmail" [value]="email.email">
+    </div>
+    <div class="col-4">
+      <label>Telefones: </label><br>
+      <input class="p-inputgroup" pInputText readonly *ngFor="let telefone of listTelefone" [value]="telefone.numero">
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button (click)="dialogVisualizar=false" label="Ok" styleClass="p-button-text"></p-button>
+  </ng-template>
+</p-dialog>
+
 
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
 <p-toast baseZIndex.number="99999" class="p-toast-topright"></p-toast>
