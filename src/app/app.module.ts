@@ -20,7 +20,7 @@ import {RatingModule} from "primeng/rating";
 import {TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ClientesService} from "./clientes.service";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {InputTextModule} from "primeng/inputtext";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ConfirmationService, MessageService} from "primeng/api";
@@ -32,6 +32,9 @@ import {KeyFilterModule} from "primeng/keyfilter";
 import {MessageModule} from "primeng/message";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {InputMaskModule} from "primeng/inputmask";
+import {InputSwitchModule} from "primeng/inputswitch";
+import { LayoutComponent } from './layout/layout.component';
+import {TokenInterceptor} from "./token.interceptor";
 
 
 @NgModule({
@@ -41,6 +44,7 @@ import {InputMaskModule} from "primeng/inputmask";
     InicioComponent,
     ListarClientesComponent,
     CadastrarClientesComponent,
+    LayoutComponent,
 
   ],
   imports: [
@@ -66,7 +70,8 @@ import {InputMaskModule} from "primeng/inputmask";
     KeyFilterModule,
     MessageModule,
     InputTextareaModule,
-    InputMaskModule
+    InputMaskModule,
+    InputSwitchModule
   ],
   providers: [
     ClientesService,
@@ -74,7 +79,12 @@ import {InputMaskModule} from "primeng/inputmask";
     MessageService,
     EmailService,
     TelefoneService,
-    CepService
+    CepService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi : true
+    }
   ],
   bootstrap: [AppComponent]
 })

@@ -1,8 +1,4 @@
-<app-navbar></app-navbar>
-<div id="layoutSidenav">
-  <app-sidebar></app-sidebar>
-  <div id="layoutSidenav_content">
-    <main>
+
       <div class="container-fluid" style="padding: 50px">
           <p-table #dt [value]="clientes" [rows]="10" [paginator]="true" [globalFilterFields]="['nome', 'cpf', 'cep', 'cidade', 'uf']" responsiveLayout="scroll"
                    [rowHover]="true" dataKey="id">
@@ -32,8 +28,8 @@
                 <td>{{cliente.cidade}}</td>
                 <td>{{cliente.uf}}</td>
                 <td>
-                  <button pButton pRipple icon="pi pi-pencil" style="margin-right: 10px" class="p-button-rounded p-button-success p-mr-2" (click)="abriEditarCliente(cliente)"></button>
-                  <button pButton pRipple icon="pi pi-trash" style="margin-right: 10px" class="p-button-rounded p-button-danger" (click)="deletarClienteSelecionado(cliente.id)"></button>
+                  <button pButton pRipple icon="pi pi-pencil" *ngIf="this.role == 'ADMIN'" style="margin-right: 10px" class="p-button-rounded p-button-success p-mr-2" (click)="abriEditarCliente(cliente)"></button>
+                  <button pButton pRipple icon="pi pi-trash" *ngIf="this.role == 'ADMIN'" style="margin-right: 10px" class="p-button-rounded p-button-danger" (click)="deletarClienteSelecionado(cliente.id)"></button>
                   <button pButton pRipple icon="pi pi-eye" style="margin-right: 10px" class="p-button-rounded p-button-primary" (click)="visualizarCliente(cliente)"></button>
                 </td>
               </tr>
@@ -45,9 +41,6 @@
             </ng-template>
           </p-table>
       </div>
-    </main>
-  </div>
-</div>
 
 <p-dialog [(visible)]="dialogEditar" [style]="{width: '600px'}" header="Editar Cliente" [modal]="true" styleClass="p-fluid">
   <ng-template pTemplate="content">

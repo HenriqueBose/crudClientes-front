@@ -2,10 +2,10 @@
   <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
     <div class="sb-sidenav-menu">
       <div class="nav">
-        <a class="nav-link" (click)="navegarCadastrar()"><div class="sb-nav-link-icon"><i class="far fa-plus-square"></i></div>
+        <a class="nav-link" *ngIf="this.role == 'ADMIN'" (click)="navegarCadastrar()"><div class="sb-nav-link-icon"><i class="far fa-plus-square"></i></div>
           Cadastrar
           </a>
-        <a class="nav-link collapsed" (click)="navegarListar()"><div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
+        <a class="nav-link collapsed"  (click)="navegarListar()"><div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
           Listar
          </a>
       </div>

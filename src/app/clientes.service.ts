@@ -24,6 +24,7 @@ export class ClientesService {
   }
 
   editar(cliente: ClienteModel): Observable<ClienteModel>{
+
     return this.http.post<ClienteModel>(environment.API + '/api/clientes/editar', cliente);
 
   }

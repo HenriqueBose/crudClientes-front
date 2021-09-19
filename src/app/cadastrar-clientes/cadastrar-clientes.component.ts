@@ -29,7 +29,10 @@ export class CadastrarClientesComponent implements OnInit {
 
   cliente: ClienteModel = new ClienteModel();
   alphanumericos : RegExp = /^[\w\-\s]+$/
+  emailValido: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   lastId: number;
+  selectTipoTelefone: boolean = false;
+  celular: boolean = false;
 
 
   constructor(private clienteService: ClientesService,
@@ -68,7 +71,8 @@ export class CadastrarClientesComponent implements OnInit {
       console.log(this.lastId)
       this.salvarEmails();
       this.salvarNumeros();
-      this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'response.msg', life: 3000});
+      this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Cliente cadastrado com sucesso!', life: 3000});
+      this.limparCampos()
     },error =>{
       console.log(error)
       this.messageService.add({severity:'error', summary: 'Erro', detail: error, life: 3000});
@@ -125,5 +129,28 @@ export class CadastrarClientesComponent implements OnInit {
         console.log(error)
       })
     });
+  }
+
+  teste() {
+    console.log(this.celular)
+  }
+
+  removeNumero(index: number) {
+    this.telefoneList.splice(index, 1)
+  }
+  removeEmail(index: number) {
+    this.emailList.splice(index, 1)
+  }
+
+  private limparCampos() {
+
+
+  }
+
+  validaEmail(i: number) {
+      if (this.emailList[i].email.split("@").length -1 != 1){
+        this.emailList[i].email = ''
+        this.messageService.add({severity:'warning', summary: 'Cuidado', detail: 'Insira um email válido', life: 3000});
+      }
   }
 }

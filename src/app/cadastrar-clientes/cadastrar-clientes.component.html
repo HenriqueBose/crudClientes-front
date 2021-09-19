@@ -1,9 +1,5 @@
-<p-toast></p-toast>
+<p-toast style="position: relative; z-index:10000"></p-toast>
 
-<app-navbar xmlns="http://www.w3.org/1999/html"></app-navbar>
-<div id="layoutSidenav">
-  <app-sidebar></app-sidebar>
-  <div id="layoutSidenav_content">
     <div class="container-fluid">
       <div class="card" style="margin: 1%;font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif">
         <h5 style="margin: 1%">Cadastrar cliente</h5>
@@ -48,14 +44,18 @@
               <textarea type="text" [(ngModel)]="cliente.complemento" pInputTextarea class="form-control" id="complemento" placeholder="Complemento"></textarea>
             </div>
             <div class="form-row">
-              <div  class="form-group col-md-12">
+              <div  class="form-group col-md-11">
                 <label for="email">EMAIL</label><span style="color: red"> * </span><a  href="javascript:void(0);" (click)="addEmail()"><i style="size: 2em" class="fas fa-plus-square"></i></a>
-                <input *ngFor="let email of emailList;let i=index" type="email" [(ngModel)]="emailList[i].email" pInputText class="form-control" id="email" placeholder="Email">
-              </div>
+                <div *ngFor="let email of emailList;let i=index" style="padding: 0">
+                <input type="email" (focusout)="validaEmail(i)" [(ngModel)]="emailList[i].email" width="max-content" pInputText class="form-control" id="email" placeholder="Email"><a *ngIf="emailList.length > 1" (click)="removeEmail(i)" href="javascript:void(0);"><i  style="color: red" class="far fa-times-circle"></i></a>
+                </div>
+                </div>
               <div class="form-group col-md-12">
-                <label for="telefone">TELEFONE</label><span style="color: red"> * </span><a  href="javascript:void(0);" (click)="addTelefone()"><i style="size: 2em" class="fas fa-plus-square"></i></a>
-                <input *ngFor="let telefone of telefoneList;let i=index"  [(ngModel)]="telefoneList[i].numero" type="number" pInputText class="form-control" id="telefone" placeholder="Telefone">
-              </div>
+                <span>TELEFONE</span><span style="color: red"> * </span><a  href="javascript:void(0);" (click)="addTelefone()"><i style="size: 2em" class="fas fa-plus-square"></i></a><br>
+                <div *ngFor="let telefone of telefoneList;let i=index" style="padding: 0">
+                <p-inputMask mask="(99)99999-9999"  [(ngModel)]="telefoneList[i].numero" placeholder="Telefone"></p-inputMask><a *ngIf="telefoneList.length > 1" (click)="removeNumero(i)" href="javascript:void(0);"><i  style="color: red" class="far fa-times-circle"></i></a>
+                </div>
+                </div>
             </div>
             <div style="text-align: right; margin-bottom: 2%">
               <button (click)="cadastrarCliente()" [disabled]="validaCampos()" class="btn btn-primary">Cadastrar</button>
@@ -64,5 +64,4 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
+

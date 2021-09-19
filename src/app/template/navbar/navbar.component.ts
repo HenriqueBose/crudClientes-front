@@ -8,13 +8,14 @@ import {Router} from "@angular/router";
 })
 export class NavbarComponent implements OnInit {
 
-  usuario = sessionStorage.getItem('user')
+  usuario = sessionStorage.getItem('login')
   constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
 
   sair() {
+    localStorage.removeItem('access_token')
     this.router.navigate(['login'])
   }
 

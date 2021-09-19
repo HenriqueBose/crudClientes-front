@@ -8,9 +8,12 @@ import {Router} from "@angular/router";
 })
 export class SidebarComponent implements OnInit {
 
+  role:string | null;
+
   constructor(private router: Router) { }
 
   ngOnInit(): void {
+    this.role = sessionStorage.getItem('role');
   }
 
   navegarListar() {

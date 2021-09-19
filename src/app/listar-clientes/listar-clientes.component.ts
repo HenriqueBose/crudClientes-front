@@ -18,6 +18,7 @@ import {createSelf} from "@angular/compiler/src/core";
 export class ListarClientesComponent implements OnInit {
 
 
+  role: string | null;
   clientes: Array<ClienteModel> = []
   listEmail: Array<EmailModel> = []
   listTelefone: Array<TelefoneModel> = []
@@ -33,6 +34,7 @@ export class ListarClientesComponent implements OnInit {
               private messageService: MessageService) { }
 
   ngOnInit(): void {
+    this.role = sessionStorage.getItem('role')
     this.refreshData()
 
   }
@@ -50,17 +52,24 @@ export class ListarClientesComponent implements OnInit {
     await this.clienteService.editar(this.clienteSelecionado).subscribe(response => {
       console.log('response', response);
       this.refreshData()
-      this.messageService.add({severity:'success', summary:'Confirmed', detail:'Cliente editado com sucesso!'});
+      this.editarEmails();
+      this.editarTelefones();
+      this.dialogEditar = false;
+      this.messageService.add({severity:'success', summary:'Sucesso', detail:'Cliente editado com sucesso!'});
+    }, error => {
+      console.log(error)
+      this.messageService.add({severity:'error', summary:'Erro', detail:error.error_description});
     })
-    this.editarEmails();
-    this.editarTelefones();
-    this.dialogEditar = false;
+
   }
 
   deletarCliente(id: number) {
     this.clienteService.deletar(id).subscribe(response =>{
       console.log(response)
+      this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Cliente deletado', life: 3000});
       this.ngOnInit()
+    }, error=>{
+      this.messageService.add({severity:'error', summary: 'Error', detail: 'Não foi possível deletar o cliente.', life: 3000});
     })
   }
 
@@ -82,7 +91,7 @@ export class ListarClientesComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.deletarCliente(id)
-        this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Cliente deletado', life: 3000});
+
 
       }
     });
