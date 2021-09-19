@@ -143,8 +143,18 @@ export class CadastrarClientesComponent implements OnInit {
   }
 
   private limparCampos() {
-
-
+    this.cliente.nome = '';
+    this.cliente.cpf = '';
+    this.cliente.cep = 0;
+    this.cliente.logradouro = '';
+    this.cliente.cidade = '';
+    this.cliente.bairro = '';
+    this.cliente.uf = '';
+    this.cliente.complemento = ''
+    this.emailList = []
+    this.telefoneList = []
+    this.addEmail();
+    this.addTelefone();
   }
 
   validaEmail(i: number) {
