@@ -1,3 +1,7 @@
 ::ng-deep .toolbarInicio{
   background-color: #343B41;
 }
+
+.container{
+  background-image: url(crud.jpg);
+}

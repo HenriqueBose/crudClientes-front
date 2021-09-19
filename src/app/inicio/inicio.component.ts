@@ -16,4 +16,8 @@ export class InicioComponent implements OnInit {
 
   }
 
+  getUrl()
+  {
+    return "url('crud.jpg')";
+  }
 }
