@@ -21,11 +21,8 @@ export class CadastrarClientesComponent implements OnInit {
     email: '',
     id: 0
   }];
-  telefoneList: TelefoneModel[] =  [{
-    idCliente: 0,
-    numero: '',
-    id: 0
-  }];
+  telefoneList: TelefoneModel[] =  []
+  tipoTelefoneList: Array<number> = []
 
   cliente: ClienteModel = new ClienteModel();
   alphanumericos : RegExp = /^[\w\-\s]+$/
@@ -162,5 +159,17 @@ export class CadastrarClientesComponent implements OnInit {
         this.emailList[i].email = ''
         this.messageService.add({severity:'warning', summary: 'Cuidado', detail: 'Insira um email válido', life: 3000});
       }
+  }
+
+  onSelect(value: any, index: any) {
+    this.tipoTelefoneList[index] = value;
+  }
+
+  tipoMask(i: number): string {
+    if(this.tipoTelefoneList[i] == 1){
+      return '(99)99999-9999';
+    }else if(this.tipoTelefoneList[i] == 2){
+      return '(99)9999-9999'
+    }else return '';
   }
 }

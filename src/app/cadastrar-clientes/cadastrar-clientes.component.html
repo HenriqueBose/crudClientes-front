@@ -53,7 +53,12 @@
               <div class="form-group col-md-12">
                 <span>TELEFONE</span><span style="color: red"> * </span><a  href="javascript:void(0);" (click)="addTelefone()"><i style="size: 2em" class="fas fa-plus-square"></i></a><br>
                 <div *ngFor="let telefone of telefoneList;let i=index" style="padding: 0">
-                <p-inputMask mask="(99)99999-9999"  [(ngModel)]="telefoneList[i].numero" placeholder="Telefone"></p-inputMask><a *ngIf="telefoneList.length > 1" (click)="removeNumero(i)" href="javascript:void(0);"><i  style="color: red" class="far fa-times-circle"></i></a>
+                <p-inputMask [mask]="tipoMask(i)"  [(ngModel)]="telefoneList[i].numero" placeholder="Telefone"></p-inputMask><a *ngIf="telefoneList.length > 1" (click)="removeNumero(i)" href="javascript:void(0);"><i  style="color: red" class="far fa-times-circle"></i></a>
+                <select (change)="onSelect($event.target.value, i)" style="margin-left: 1%">
+                  <option [value]="-1" disabled selected>Tipo</option>
+                  <option [value]="1">Celular</option>
+                  <option [value]="2">Fixo</option>
+                </select>
                 </div>
                 </div>
             </div>
